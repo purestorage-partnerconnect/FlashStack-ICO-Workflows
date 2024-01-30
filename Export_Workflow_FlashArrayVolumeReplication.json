@@ -1,0 +1,2844 @@
+[
+    {
+        "Body": {
+            "ClassId": "workflow.CustomDataTypeDefinition",
+            "Description": "Storage target device.",
+            "Label": "Storage Target Datatype",
+            "Name": "StorageTargetDataType",
+            "ObjectType": "workflow.CustomDataTypeDefinition",
+            "ParameterSet": [],
+            "Properties": {
+                "ObjectType": "workflow.CustomDataTypeProperties"
+            },
+            "SharedScope": "shared",
+            "TypeDefinition": [
+                {
+                    "CustomDataTypeProperties": {
+                        "ObjectType": "workflow.CustomDataProperty"
+                    },
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Storage target device.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Storage Device",
+                    "Name": "StorageDevice",
+                    "ObjectType": "workflow.TargetDataType",
+                    "Properties": [
+                        {
+                            "ConnectorAttribute": "RegisteredDevice.Moid",
+                            "ConstraintAttributes": [
+                                "ObjectType",
+                                "ApiVersion"
+                            ],
+                            "DisplayAttributes": [
+                                "Name",
+                                "SvpIp",
+                                "Serial",
+                                "Vendor"
+                            ],
+                            "ObjectType": "workflow.TargetProperty",
+                            "Selector": "/api/v1/search/SearchItems?$filter=(IndexMotypes eq storage.BaseArray)&$orderby=Name",
+                            "SelectorProperty": {
+                                "Method": "GET",
+                                "ObjectType": "workflow.SelectorProperty"
+                            },
+                            "SupportedObjects": [
+                                "storage.PureArray",
+                                "storage.HitachiArray",
+                                "storage.NetAppCluster"
+                            ]
+                        }
+                    ],
+                    "Required": true
+                }
+            ]
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/CustomDataTypeDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.CustomDataTypeDefinition",
+            "Description": "Volume name.",
+            "Label": "Storage Volume",
+            "Name": "StorageVolumeNameType",
+            "ObjectType": "workflow.CustomDataTypeDefinition",
+            "ParameterSet": [],
+            "Properties": {
+                "ObjectType": "workflow.CustomDataTypeProperties"
+            },
+            "SharedScope": "shared",
+            "TypeDefinition": [
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Volume name",
+                    "Name": "VolumeName",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "Max": 254,
+                            "Min": 1,
+                            "ObjectType": "workflow.Constraints",
+                            "Regex": "^[a-zA-Z0-9]+([_a-zA-Z0-9-]*[a-zA-Z0-9])*$"
+                        },
+                        "InventorySelector": [
+                            {
+                                "DisplayAttributes": [
+                                    "Name"
+                                ],
+                                "ObjectType": "workflow.MoReferenceProperty",
+                                "Selector": "/api/v1/search/SearchItems?$filter=(((IndexMotypes eq storage.BaseVolume) and ( ObjectType ne storage.NetAppLun)) or (IndexMotypes eq storage.BaseStorageContainer) )&$orderby=Name&$select=Name",
+                                "SelectorProperty": {
+                                    "Method": "GET",
+                                    "ObjectType": "workflow.SelectorProperty"
+                                },
+                                "ValueAttribute": "Name"
+                            }
+                        ],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    },
+                    "Required": true
+                }
+            ]
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/CustomDataTypeDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.TaskDefinition",
+            "DefaultVersion": true,
+            "Description": "Adding Target FlashArray for Creating a replication connection between the current FlashArray and the specified Target array.",
+            "Label": "Add FlashArray As Target For Replication",
+            "Name": "AddFlashArrayAsTargetForReplication",
+            "ObjectType": "workflow.TaskDefinition",
+            "Properties": {
+                "InputDefinition": [
+                    {
+                        "CustomDataTypeProperties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageTargetDataType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Storage Device",
+                        "Name": "StorageDevice",
+                        "ObjectType": "workflow.TargetDataType",
+                        "Properties": [],
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Replication Target Array Name",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Target FlashArray Name",
+                        "Name": "TargetFlashArrayName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [
+                                {
+                                    "DisplayAttributes": [
+                                        "Name"
+                                    ],
+                                    "ObjectType": "workflow.MoReferenceProperty",
+                                    "Selector": "/api/v1/storage/PureArrays?$orderby=Name&$select=Name",
+                                    "SelectorProperty": {
+                                        "Method": "GET",
+                                        "ObjectType": "workflow.SelectorProperty"
+                                    },
+                                    "ValueAttribute": "Name"
+                                }
+                            ],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "ArrayItemType": {
+                            "ObjectType": "workflow.PrimitiveArrayItem",
+                            "Properties": {
+                                "Constraints": {
+                                    "EnumList": [],
+                                    "ObjectType": "workflow.Constraints"
+                                },
+                                "InventorySelector": [],
+                                "ObjectType": "workflow.PrimitiveDataProperty",
+                                "Type": "string"
+                            }
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Replication addresses is for replication and applicable only when replication transport is set to ip. NOTE: Provide the list of IP address as array of strings using doublequotes",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Addresses",
+                        "Max": 500,
+                        "Min": 1,
+                        "Name": "ReplicationAddresses",
+                        "ObjectType": "workflow.ArrayDataType"
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Replication type. Valid values are async-replication and sync-replication.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Type",
+                        "Name": "ReplicationType",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [
+                                    {
+                                        "Label": "Async Replication",
+                                        "ObjectType": "workflow.EnumEntry",
+                                        "Value": "async-replication"
+                                    },
+                                    {
+                                        "Label": "Sync Replication",
+                                        "ObjectType": "workflow.EnumEntry",
+                                        "Value": "sync-replication"
+                                    }
+                                ],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "enum"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "The protocol used to transport data between the local array and the remote array. Valid values are ip and fc.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Transport",
+                        "Name": "ReplicationTransport",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [
+                                    {
+                                        "Label": "Ethernet-IP",
+                                        "ObjectType": "workflow.EnumEntry",
+                                        "Value": "ip"
+                                    },
+                                    {
+                                        "Label": "Fibre Channel",
+                                        "ObjectType": "workflow.EnumEntry",
+                                        "Value": "fc"
+                                    }
+                                ],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "enum"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "The connection key of the target FlashArray.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Connection key",
+                        "Name": "ConnectionKey",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    }
+                ],
+                "ObjectType": "workflow.Properties",
+                "OutputDefinition": [
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Target Flash Array Management address",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Target FlashArray Name",
+                        "Name": "TargetFlashArrayName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Replication addresses is for replication and applicable only when replication transport is set to ip. Provide the list of IP address as array of strings.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Addresses",
+                        "Name": "ReplicationAddresses",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Replication type. Valid values are async-replication and sync-replication.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Type",
+                        "Name": "ReplicationType",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "The protocol used to transport data between the local array and the remote array. Valid values are ip and fc.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replication Transport",
+                        "Name": "ReplicationTransport",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    }
+                ],
+                "RetryCount": 3,
+                "RetryDelay": 30,
+                "RetryPolicy": "Fixed",
+                "SupportStatus": "Supported",
+                "Timeout": 60,
+                "TimeoutPolicy": "Retry"
+            },
+            "RollbackTasks": [],
+            "SharedScope": "shared",
+            "Tags": [
+                {
+                    "Key": "category",
+                    "Value": "Storage"
+                },
+                {
+                    "Key": "platformType.PureStorageFlashArray",
+                    "Value": "true"
+                }
+            ],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/TaskDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.TaskDefinition",
+            "DefaultVersion": true,
+            "Description": "Create a new Protection group for pure FlashArray.",
+            "Label": "Create New protection Group On FlashArray",
+            "Name": "NewPureProtectionGroup",
+            "ObjectType": "workflow.TaskDefinition",
+            "Properties": {
+                "InputDefinition": [
+                    {
+                        "CustomDataTypeProperties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageTargetDataType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Storage Device",
+                        "Name": "StorageDevice",
+                        "ObjectType": "workflow.TargetDataType",
+                        "Properties": [],
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Protection Group name to be created on the Pure FlashArray",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "Max": 64,
+                                "Min": 1,
+                                "ObjectType": "workflow.Constraints",
+                                "Regex": "^[a-zA-Z0-9]+([_a-zA-Z0-9-]*[a-zA-Z0-9])*$"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "The names of the Protection Group or Protection Group snapshot to be copied into a new or existing protection group. If the Destination PG and all of its Volumes already exists, please incldue overwrite parameter to true  ",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group source names",
+                        "Name": "ProtectionGroupSourceNames",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, overwrites an existing volume during a volume copy operation. If set to false or not set at all and the target name is an existing volume. the volume copy operation fails.The name of the Protection Group or Protection Group snapshot to be copied into a new or existing protection group. If the Destination PG and all of its Volumes already exists, please incldue overwrite parameter to true ",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Source overwrite ",
+                        "Name": "ProtectionGroupSourceNamesOverwrite",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    }
+                ],
+                "ObjectType": "workflow.Properties",
+                "OutputDefinition": [
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Name of the Protection Group created",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group",
+                        "Name": "ProtectionGroup",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    }
+                ],
+                "RetryCount": 3,
+                "RetryDelay": 30,
+                "RetryPolicy": "Fixed",
+                "SupportStatus": "Supported",
+                "Timeout": 60,
+                "TimeoutPolicy": "Retry"
+            },
+            "RollbackTasks": [],
+            "SharedScope": "shared",
+            "Tags": [
+                {
+                    "Key": "category",
+                    "Value": "Storage"
+                },
+                {
+                    "Key": "platformType.PureStorageFlashArray",
+                    "Value": "true"
+                }
+            ],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/TaskDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.TaskDefinition",
+            "DefaultVersion": true,
+            "Description": "Creates a point-in-time snapshot of the contents of a protection group. Protection group snapshots capture the content of all volumes on the source array for the specified protection group at a single point in time.",
+            "Label": "New Pure protection Group Snapshot",
+            "Name": "NewProtectionGroupSnapshot",
+            "ObjectType": "workflow.TaskDefinition",
+            "Properties": {
+                "InputDefinition": [
+                    {
+                        "CustomDataTypeProperties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageTargetDataType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Storage Device",
+                        "Name": "StorageDevice",
+                        "ObjectType": "workflow.TargetDataType",
+                        "Properties": [],
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [
+                                {
+                                    "DisplayAttributes": [
+                                        "Name"
+                                    ],
+                                    "ObjectType": "workflow.MoReferenceProperty",
+                                    "Selector": "/api/v1/storage/PureProtectionGroups?$orderby=Name&$select=Name",
+                                    "SelectorProperty": {
+                                        "Method": "GET",
+                                        "ObjectType": "workflow.SelectorProperty"
+                                    },
+                                    "ValueAttribute": "Name"
+                                }
+                            ],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Protection Group Snapshot suffix must be between 1 and 63 characters (alphanumeric and '-') in length and begin and end with a letter or number. The suffix must include at least one letter or '-'.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Snapshot Suffix",
+                        "Name": "ProtectionGroupSnapshotSuffix",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "Max": 63,
+                                "Min": 1,
+                                "ObjectType": "workflow.Constraints",
+                                "Regex": "^[a-zA-Z0-9]+([_a-zA-Z0-9-]*[a-zA-Z0-9])*$"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, applies the local and remote retention policy to the snapshots.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Apply Retention",
+                        "Name": "ApplyRetention",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, destroys and eradicates the snapshot after 1 hour.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "For Replication",
+                        "Name": "ForReplication",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, queues up and begins replicating to each allowed target FlashArray after all earlier replication sessions for the same protection group have been completed to that target. The replicate and replicate_now parameters cannot be used together.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replicate",
+                        "Name": "Replicate",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, replicates the snapshots to each allowed target FlashArray. The replicate and replicate_now parameters cannot be used together.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replicate Now",
+                        "Name": "ReplicateNow",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    }
+                ],
+                "ObjectType": "workflow.Properties",
+                "OutputDefinition": [
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Name of the Protection Group created",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Name of the Snapshot",
+                        "Name": "SnapshotName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, applies the local and remote retention policy to the snapshots.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Apply Retention",
+                        "Name": "ApplyRetention",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, destroys and eradicates the snapshot after 1 hour.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "For Replication",
+                        "Name": "ForReplication",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, queues up and begins replicating to each allowed target FlashArray after all earlier replication sessions for the same protection group have been completed to that target. The replicate and replicate_now parameters cannot be used together.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replicate",
+                        "Name": "Replicate",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "If set to true, replicates the snapshots to each allowed target FlashArray. The replicate and replicate_now parameters cannot be used together.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Replicate Now",
+                        "Name": "ReplicateNow",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "boolean"
+                        }
+                    }
+                ],
+                "RetryCount": 3,
+                "RetryDelay": 30,
+                "RetryPolicy": "Fixed",
+                "SupportStatus": "Supported",
+                "Timeout": 60,
+                "TimeoutPolicy": "Retry"
+            },
+            "RollbackTasks": [],
+            "SharedScope": "shared",
+            "Tags": [
+                {
+                    "Key": "category",
+                    "Value": "Storage"
+                },
+                {
+                    "Key": "platformType.PureStorageFlashArray",
+                    "Value": "true"
+                }
+            ],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/TaskDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.TaskDefinition",
+            "DefaultVersion": true,
+            "Description": "Add target FlashArray to the protection group on FlashArray",
+            "Label": "Add New Target To Protection Group on FlashArray",
+            "Name": "AddNewTargetToProtectionGroup",
+            "ObjectType": "workflow.TaskDefinition",
+            "Properties": {
+                "InputDefinition": [
+                    {
+                        "CustomDataTypeProperties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageTargetDataType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Storage Device",
+                        "Name": "StorageDevice",
+                        "ObjectType": "workflow.TargetDataType",
+                        "Properties": [],
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [
+                                {
+                                    "DisplayAttributes": [
+                                        "Name"
+                                    ],
+                                    "ObjectType": "workflow.MoReferenceProperty",
+                                    "Selector": "/api/v1/storage/PureProtectionGroups?$orderby=Name&$select=Name",
+                                    "SelectorProperty": {
+                                        "Method": "GET",
+                                        "ObjectType": "workflow.SelectorProperty"
+                                    },
+                                    "ValueAttribute": "Name"
+                                }
+                            ],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Adds an array to a protection group",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Target FlashArray Name",
+                        "Name": "TargetFlashArrayName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [
+                                {
+                                    "DisplayAttributes": [
+                                        "Name"
+                                    ],
+                                    "ObjectType": "workflow.MoReferenceProperty",
+                                    "Selector": "/api/v1/storage/PureArrays?$orderby=Name&$select=Name",
+                                    "SelectorProperty": {
+                                        "Method": "GET",
+                                        "ObjectType": "workflow.SelectorProperty"
+                                    },
+                                    "ValueAttribute": "Name"
+                                }
+                            ],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    }
+                ],
+                "ObjectType": "workflow.Properties",
+                "OutputDefinition": [
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Name of the Protection Group",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Target FlashArray name",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Target FlashArray Name ",
+                        "Name": "TargetFlashArrayName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    }
+                ],
+                "RetryCount": 3,
+                "RetryDelay": 30,
+                "RetryPolicy": "Fixed",
+                "SupportStatus": "Supported",
+                "Timeout": 60,
+                "TimeoutPolicy": "Retry"
+            },
+            "RollbackTasks": [],
+            "SharedScope": "shared",
+            "Tags": [
+                {
+                    "Key": "category",
+                    "Value": "Storage"
+                },
+                {
+                    "Key": "platformType.PureStorageFlashArray",
+                    "Value": "true"
+                }
+            ],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/TaskDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.TaskDefinition",
+            "DefaultVersion": true,
+            "Description": "Add volume as a memeber in to protection group. Members that are already in the protection group are not affected.",
+            "Label": "Add Volumes to Pure Protection Group",
+            "Name": "AddVolumesToProtectionGroups",
+            "ObjectType": "workflow.TaskDefinition",
+            "Properties": {
+                "InputDefinition": [
+                    {
+                        "CustomDataTypeProperties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageTargetDataType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Storage Device",
+                        "Name": "StorageDevice",
+                        "ObjectType": "workflow.TargetDataType",
+                        "Properties": [],
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group Name",
+                        "Name": "ProtectionGroupName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [
+                                {
+                                    "DisplayAttributes": [
+                                        "Name"
+                                    ],
+                                    "ObjectType": "workflow.MoReferenceProperty",
+                                    "Selector": "/api/v1/storage/PureProtectionGroups?$orderby=Name&$select=Name",
+                                    "SelectorProperty": {
+                                        "Method": "GET",
+                                        "ObjectType": "workflow.SelectorProperty"
+                                    },
+                                    "ValueAttribute": "Name"
+                                }
+                            ],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        },
+                        "Required": true
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Source Volume which needs to be added in to the group.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Source Volume",
+                        "Name": "VolumeName",
+                        "ObjectType": "workflow.CustomDataType",
+                        "Properties": {
+                            "CatalogMoid": "shared",
+                            "CustomDataTypeName": "StorageVolumeNameType",
+                            "ObjectType": "workflow.CustomDataProperty"
+                        },
+                        "Required": true
+                    }
+                ],
+                "ObjectType": "workflow.Properties",
+                "OutputDefinition": [
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Protection Group in which the Volume has been added.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Protection Group",
+                        "Name": "ProtectionGroup",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    {
+                        "Default": {
+                            "ObjectType": "workflow.DefaultValue"
+                        },
+                        "Description": "Source Volume which needs to be added in to the group.",
+                        "DisplayMeta": {
+                            "InventorySelector": true,
+                            "ObjectType": "workflow.DisplayMeta",
+                            "WidgetType": "None"
+                        },
+                        "Label": "Source Volume",
+                        "Name": "VolumeName",
+                        "ObjectType": "workflow.PrimitiveDataType",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    }
+                ],
+                "RetryCount": 3,
+                "RetryDelay": 30,
+                "RetryPolicy": "Fixed",
+                "SupportStatus": "Supported",
+                "Timeout": 60,
+                "TimeoutPolicy": "Retry"
+            },
+            "RollbackTasks": [],
+            "SharedScope": "shared",
+            "Tags": [
+                {
+                    "Key": "category",
+                    "Value": "Storage"
+                },
+                {
+                    "Key": "platformType.PureStorageFlashArray",
+                    "Value": "true"
+                }
+            ],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/TaskDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.WorkflowDefinition",
+            "DefaultVersion": true,
+            "Description": "Sample workflow to connect arrays for replication, create new protection group, add member volumes, add target arrays, and replicate new protection group snapshot.",
+            "InputDefinition": [
+                {
+                    "CustomDataTypeProperties": {
+                        "CatalogMoid": "shared",
+                        "CustomDataTypeName": "StorageTargetDataType",
+                        "ObjectType": "workflow.CustomDataProperty"
+                    },
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Source FlashArray for this workflow execution.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Source FlashArray",
+                    "Name": "SourceStorageDevice",
+                    "ObjectType": "workflow.TargetDataType",
+                    "Properties": [],
+                    "Required": true
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Target FlashArray for replication",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Replication Target FlashArray Name",
+                    "Name": "ReplicationTargetFlashArrayName",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    },
+                    "Required": true
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Name of Protection Group",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Protection Group Name",
+                    "Name": "ProtectionGroupName",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Replication type for protection group",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "Radio"
+                    },
+                    "Label": "Replication Type",
+                    "Name": "ReplicationType",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [
+                                {
+                                    "Label": "Synchronous Replication ",
+                                    "ObjectType": "workflow.EnumEntry",
+                                    "Value": "sync-replication"
+                                },
+                                {
+                                    "Label": "Async Replication ",
+                                    "ObjectType": "workflow.EnumEntry",
+                                    "Value": "async-replication"
+                                }
+                            ],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "enum"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Transport used for replication",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "Radio"
+                    },
+                    "Label": "Replication Transport",
+                    "Name": "ReplicationTransport",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [
+                                {
+                                    "Label": "Ethernet",
+                                    "ObjectType": "workflow.EnumEntry",
+                                    "Value": "ip"
+                                },
+                                {
+                                    "Label": "Fibre Channel",
+                                    "ObjectType": "workflow.EnumEntry",
+                                    "Value": "fc"
+                                }
+                            ],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "enum"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Connection Key for Target Array ",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Array Connection Key",
+                    "Name": "ArrayConnectionKey",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints",
+                            "Regex": "^[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}$"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    }
+                },
+                {
+                    "ArrayItemType": {
+                        "ObjectType": "workflow.PrimitiveArrayItem",
+                        "Properties": {
+                            "Constraints": {
+                                "EnumList": [],
+                                "ObjectType": "workflow.Constraints"
+                            },
+                            "InventorySelector": [],
+                            "ObjectType": "workflow.PrimitiveDataProperty",
+                            "Type": "string"
+                        }
+                    },
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Replication addresses for replication and applicable only when replication transport is set to ip. NOTE: Provide the list of IP address as array of strings using doublequotes",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Replication Addresses",
+                    "Max": 500,
+                    "Min": 1,
+                    "Name": "ReplicationAddresses",
+                    "ObjectType": "workflow.ArrayDataType"
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "The names of the Protection Group or Protection Group snapshot to be copied into a new or existing protection group. If the Destination PG and all of its Volumes already exists, please incldue overwrite parameter to true  ",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Protection Group source names",
+                    "Name": "ProtectionGroupSourceNames",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "If set to true, overwrites an existing volume during a volume copy operation. If set to false or not set at all and the target name is an existing volume. the volume copy operation fails.The name of the Protection Group or Protection Group snapshot to be copied into a new or existing protection group. If the Destination PG and all of its Volumes already exists, please incldue overwrite parameter to true ",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Protection Group Source overwrite ",
+                    "Name": "ProtectionGroupSourceNamesOverwrite",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "boolean"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Protection Group Snapshot suffix must be between 1 and 63 characters (alphanumeric and '-') in length and begin and end with a letter or number. The suffix must include at least one letter or '-'.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Protection Group Snapshot Suffix",
+                    "Name": "ProtectionGroupSnapshotSuffix",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "Max": 63,
+                            "Min": 1,
+                            "ObjectType": "workflow.Constraints",
+                            "Regex": "^[a-zA-Z0-9]+([_a-zA-Z0-9-]*[a-zA-Z0-9])*$"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "If set to true, applies the local and remote retention policy to the snapshots.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Apply Retention",
+                    "Name": "ApplyRetention",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "boolean"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "If set to true, destroys and eradicates the snapshot after 1 hour.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "For Replication",
+                    "Name": "ForReplication",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "boolean"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "If set to true, queues up and begins replicating to each allowed target FlashArray after all earlier replication sessions for the same protection group have been completed to that target. The replicate and replicate_now parameters cannot be used together.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Replicate",
+                    "Name": "Replicate",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "boolean"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "If set to true, replicates the snapshots to each allowed target FlashArray. The replicate and replicate_now parameters cannot be used together.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Replicate Now",
+                    "Name": "ReplicateNow",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "boolean"
+                    }
+                },
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Source Volume which needs to be added in to the group.",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Source Volume",
+                    "Name": "VolumeName",
+                    "ObjectType": "workflow.CustomDataType",
+                    "Properties": {
+                        "CatalogMoid": "shared",
+                        "CustomDataTypeName": "StorageVolumeNameType",
+                        "ObjectType": "workflow.CustomDataProperty"
+                    },
+                    "Required": true
+                }
+            ],
+            "InputParameterSet": [],
+            "Label": "FlashArray Volume Replication",
+            "Name": "FlashArrayVolumeReplication",
+            "ObjectType": "workflow.WorkflowDefinition",
+            "OutputDefinition": [
+                {
+                    "Default": {
+                        "ObjectType": "workflow.DefaultValue"
+                    },
+                    "Description": "Name of the Protection Group created",
+                    "DisplayMeta": {
+                        "InventorySelector": true,
+                        "ObjectType": "workflow.DisplayMeta",
+                        "WidgetType": "None"
+                    },
+                    "Label": "Protection Group",
+                    "Name": "ProtectionGroup",
+                    "ObjectType": "workflow.PrimitiveDataType",
+                    "Properties": {
+                        "Constraints": {
+                            "EnumList": [],
+                            "ObjectType": "workflow.Constraints"
+                        },
+                        "InventorySelector": [],
+                        "ObjectType": "workflow.PrimitiveDataProperty",
+                        "Type": "string"
+                    }
+                }
+            ],
+            "Properties": {
+                "ObjectType": "workflow.WorkflowProperties",
+                "SupportStatus": "Supported"
+            },
+            "SharedScope": "user",
+            "Tags": [
+                {
+                    "Key": "Platform",
+                    "Value": "PureFlashArray"
+                },
+                {
+                    "Key": "UseCase",
+                    "Value": "Replication"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "FlashStack"
+                }
+            ],
+            "Tasks": [
+                {
+                    "Name": "StartTask",
+                    "NextTask": "AddFlashArrayAsTargetForReplication1",
+                    "ObjectType": "workflow.StartTask"
+                },
+                {
+                    "CatalogMoid": "shared",
+                    "Description": "Adding Target FlashArray for Creating a replication connection between the current FlashArray and the specified Target array.",
+                    "InputParameters": {
+                        "ConnectionKey": "${workflow.input.ArrayConnectionKey}",
+                        "ReplicationAddresses": "${workflow.input.ReplicationAddresses}",
+                        "ReplicationTransport": "${workflow.input.ReplicationTransport}",
+                        "ReplicationType": "${workflow.input.ReplicationType}",
+                        "StorageDevice": "${workflow.input.SourceStorageDevice}",
+                        "TargetFlashArrayName": "${workflow.input.ReplicationTargetFlashArrayName}"
+                    },
+                    "Label": "Add FlashArray As Target For Replication",
+                    "Name": "AddFlashArrayAsTargetForReplication1",
+                    "ObjectType": "workflow.WorkerTask",
+                    "OnSuccess": "NewPureProtectionGroup1",
+                    "TaskDefinitionName": "AddFlashArrayAsTargetForReplication",
+                    "Version": 1
+                },
+                {
+                    "CatalogMoid": "shared",
+                    "Description": "Create a new Protection group for pure FlashArray.",
+                    "InputParameters": {
+                        "ProtectionGroupName": "${workflow.input.ProtectionGroupName}",
+                        "ProtectionGroupSourceNames": "${workflow.input.ProtectionGroupSourceNames}",
+                        "ProtectionGroupSourceNamesOverwrite": "${workflow.input.ProtectionGroupSourceNamesOverwrite}",
+                        "StorageDevice": "${workflow.input.SourceStorageDevice}"
+                    },
+                    "Label": "Create New protection Group On FlashArray",
+                    "Name": "NewPureProtectionGroup1",
+                    "ObjectType": "workflow.WorkerTask",
+                    "OnSuccess": "AddVolumesToProtectionGroups1",
+                    "TaskDefinitionName": "NewPureProtectionGroup",
+                    "Version": 1
+                },
+                {
+                    "CatalogMoid": "shared",
+                    "Description": "Creates a point-in-time snapshot of the contents of a protection group. Protection group snapshots capture the content of all volumes on the source array for the specified protection group at a single point in time.",
+                    "InputParameters": {
+                        "ApplyRetention": "${workflow.input.ApplyRetention}",
+                        "ForReplication": "${workflow.input.ForReplication}",
+                        "ProtectionGroupName": "${NewPureProtectionGroup1.output.ProtectionGroup}",
+                        "ProtectionGroupSnapshotSuffix": "${workflow.input.ProtectionGroupSnapshotSuffix}",
+                        "Replicate": "${workflow.input.Replicate}",
+                        "ReplicateNow": "${workflow.input.ReplicateNow}",
+                        "StorageDevice": "${workflow.input.SourceStorageDevice}"
+                    },
+                    "Label": "New Pure protection Group Snapshot",
+                    "Name": "NewProtectionGroupSnapshot1",
+                    "ObjectType": "workflow.WorkerTask",
+                    "OnSuccess": "SuccessEndTask",
+                    "TaskDefinitionName": "NewProtectionGroupSnapshot",
+                    "Version": 1
+                },
+                {
+                    "Name": "SuccessEndTask",
+                    "ObjectType": "workflow.SuccessEndTask"
+                },
+                {
+                    "Name": "FailureEndTask",
+                    "ObjectType": "workflow.FailureEndTask"
+                },
+                {
+                    "CatalogMoid": "shared",
+                    "Description": "Add target FlashArray to the protection group on FlashArray",
+                    "InputParameters": {
+                        "ProtectionGroupName": "${workflow.input.ProtectionGroupName}",
+                        "StorageDevice": "${workflow.input.SourceStorageDevice}",
+                        "TargetFlashArrayName": "${workflow.input.ReplicationTargetFlashArrayName}"
+                    },
+                    "Label": "Add New Target To Protection Group on FlashArray",
+                    "Name": "AddNewTargetToProtectionGroup1",
+                    "ObjectType": "workflow.WorkerTask",
+                    "OnSuccess": "NewProtectionGroupSnapshot1",
+                    "TaskDefinitionName": "AddNewTargetToProtectionGroup",
+                    "Version": 1
+                },
+                {
+                    "CatalogMoid": "shared",
+                    "Description": "Add volume as a memeber in to protection group. Members that are already in the protection group are not affected.",
+                    "InputParameters": {
+                        "ProtectionGroupName": "${workflow.input.ProtectionGroupName}",
+                        "StorageDevice": "${workflow.input.SourceStorageDevice}",
+                        "VolumeName": "${workflow.input.VolumeName}"
+                    },
+                    "Label": "Add Volumes to Pure Protection Group",
+                    "Name": "AddVolumesToProtectionGroups1",
+                    "ObjectType": "workflow.WorkerTask",
+                    "OnSuccess": "AddNewTargetToProtectionGroup1",
+                    "TaskDefinitionName": "AddVolumesToProtectionGroups",
+                    "Version": 1
+                }
+            ],
+            "UiInputFilters": [
+                {
+                    "Filters": [
+                        "Ancestors.Moid eq '${SourceStorageDevice.Moid}'"
+                    ],
+                    "Name": "VolumeName",
+                    "ObjectType": "workflow.UiInputFilter"
+                }
+            ],
+            "UiRenderingData": {
+                "PDModesMeta": {
+                    "VolumeName": "simple"
+                },
+                "Positions": [
+                    {
+                        "Name": "StartTask",
+                        "X": 749,
+                        "Y": 249
+                    },
+                    {
+                        "Name": "AddFlashArrayAsTargetForReplication1",
+                        "X": 664,
+                        "Y": 324.5
+                    },
+                    {
+                        "Name": "NewPureProtectionGroup1",
+                        "X": 664,
+                        "Y": 423.5
+                    },
+                    {
+                        "Name": "NewProtectionGroupSnapshot1",
+                        "X": 661.5806038025903,
+                        "Y": 683.1946030339466
+                    },
+                    {
+                        "Name": "SuccessEndTask",
+                        "X": 749,
+                        "Y": 819.5
+                    },
+                    {
+                        "Name": "FailureEndTask",
+                        "X": 889,
+                        "Y": 819.5
+                    },
+                    {
+                        "Name": "AddNewTargetToProtectionGroup1",
+                        "X": 664,
+                        "Y": 598.3204920308119
+                    },
+                    {
+                        "Name": "AddVolumesToProtectionGroups1",
+                        "X": 665,
+                        "Y": 522.5
+                    }
+                ]
+            },
+            "VariableDefinition": [],
+            "Version": 1
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/WorkflowDefinitions",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "ClassId": "workflow.ErrorResponseHandler",
+            "Name": "PureArrayApiErrorResponseHandler",
+            "ObjectType": "workflow.ErrorResponseHandler",
+            "Parameters": [
+                {
+                    "AcceptSingleValue": true,
+                    "ComplexType": "Error",
+                    "ItemType": "complex",
+                    "Name": "Errors",
+                    "ObjectType": "content.Parameter",
+                    "Path": "$",
+                    "Type": "collection"
+                }
+            ],
+            "PlatformType": "PureStorageFlashArray",
+            "SharedScope": "shared",
+            "Types": [
+                {
+                    "Name": "Error",
+                    "ObjectType": "content.ComplexType",
+                    "Parameters": [
+                        {
+                            "ItemType": "simple",
+                            "Name": "Ctx",
+                            "ObjectType": "content.Parameter",
+                            "Path": "$.ctx",
+                            "Type": "simple"
+                        },
+                        {
+                            "ItemType": "simple",
+                            "Name": "Msg",
+                            "ObjectType": "content.Parameter",
+                            "Path": "$.msg",
+                            "Type": "simple"
+                        },
+                        {
+                            "ItemType": "simple",
+                            "Name": "ErrorCode",
+                            "ObjectType": "content.Parameter",
+                            "Path": "$.pure_err_code",
+                            "Type": "simple"
+                        }
+                    ]
+                }
+            ]
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/ErrorResponseHandlers",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "Batch": [
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "GET",
+                    "Name": "GetArrayVersion",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{ne .global.GetArrayVersion.output.ApiVersion \"2\"}}",
+                            "Message": "This task is only supported on PureArrays with Purity FA version 6.2.0 and greater.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Get Array ApiVersion successful.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ApiVersion",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.ApiVersion",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Local",
+                    "Url": "/v1/storage/PureArrays/{{.global.task.input.StorageDevice.Moid}}"
+                },
+                {
+                    "Body": "{\"management_address\":\"{{.global.task.input.TargetFlashArrayName}}\", \"type\":\"{{.global.task.input.ReplicationType}}\", \"connection_key\":\"{{.global.task.input.ConnectionKey}}\", \"replication_transport\":\"{{.global.task.input.ReplicationTransport}}\",  \"replication_addresses\": {{if eq .global.task.input.ReplicationTransport  \"ip\"}} {{.global.task.input.ReplicationAddresses}} {{else}} [] {{end}}}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "AddPureFlashArrayAsTargetForReplica2x",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.AddPureFlashArrayAsTargetForReplica2x.output.HttpStatusCode 401}}",
+                            "Message": "Invalid credentials. Please check the username and password for connecting to the endpoint.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "{{and (ge .global.AddPureFlashArrayAsTargetForReplica2x.output.HttpStatusCode 400) (lt .global.AddPureFlashArrayAsTargetForReplica2x.output.HttpStatusCode 600)}}",
+                            "Error": true,
+                            "Message": "{{if .global.AddPureFlashArrayAsTargetForReplica2x.output.Errors}}{{$err := (index .global.AddPureFlashArrayAsTargetForReplica2x.output.Errors 0)}}{{if (index $err \"Ctx\")}}{{$err.Ctx}}: {{end}}{{$err.Msg}}{{else}}{{.global.AddPureFlashArrayAsTargetForReplica2x.output.HttpStatusMsg}}{{end}}",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Target FlashArray added successfully for replication.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "TargetArrayName",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].name",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "TargetArrayStatus",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].status",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "TargetArrayReplicationType",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].type",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "TargetArrayReplicationTransport",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].replication_transport",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ManagementAddress",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].management_address",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ReplicationAddresses",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].replication_addresses",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Endpoint",
+                    "Url": "/array-connections"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureTargetArray\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.TargetFlashArrayName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "Inventory updated successfully",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                }
+            ],
+            "CancelAction": [],
+            "ClassId": "workflow.BatchApiExecutor",
+            "Constraints": {
+                "ObjectType": "workflow.TaskConstraints",
+                "TargetDataType": {
+                    "ApiVersion": "2",
+                    "ObjectType": "storage.PureArray"
+                }
+            },
+            "Description": "Adding Target FlashArray for Creating a replication connection between the current FlashArray and the specified Target array.",
+            "ErrorResponseHandler": {
+                "ObjectType": "workflow.ErrorResponseHandler",
+                "Selector": "Name eq \"PureArrayApiErrorResponseHandler\""
+            },
+            "Name": "AddPureFlashArrayAsTargetForReplica2x",
+            "ObjectType": "workflow.BatchApiExecutor",
+            "Output": {
+                "TargetArrayName": "{{.global.AddPureFlashArrayAsTargetForReplica2x.output.TargetArrayName}}",
+                "TargetArrayStatus": "{{.global.AddPureFlashArrayAsTargetForReplica2x.output.TargetArrayStatus}}"
+            },
+            "RetryFromFailedApi": true,
+            "SharedScope": "shared",
+            "TaskDefinition": {
+                "ObjectType": "workflow.TaskDefinition",
+                "Selector": "Name eq \"AddFlashArrayAsTargetForReplication\" and Version eq 1"
+            }
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/BatchApiExecutors",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "Batch": [
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "GET",
+                    "Name": "GetArrayVersion",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{ne .global.GetArrayVersion.output.ApiVersion \"2\"}}",
+                            "Message": "This task is only supported on PureArrays with Purity FA version 6.2.0 and greater.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Get Array ApiVersion successful.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ApiVersion",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.ApiVersion",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Local",
+                    "Url": "/v1/storage/PureArrays/{{.global.task.input.StorageDevice.Moid}}"
+                },
+                {
+                    "Body": "{\"names\":\"{{.global.task.input.ProtectionGroupName}}\",  {{if .global.task.input.ProtectionGroupSourceNames}}  \"source_names\":\"{{.global.task.input.ProtectionGroupSourceNames}}\", {{end}} \"overwrite\":\"{{.global.task.input.ProtectionGroupSourceNamesOverwrite}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "NewPureStorageProtectionGroup2x",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.NewPureStorageProtectionGroup2x.output.HttpStatusCode 401}}",
+                            "Message": "Invalid credentials. Please check the username and password for connecting to the endpoint.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "{{and (ge .global.NewPureStorageProtectionGroup2x.output.HttpStatusCode 400) (lt .global.NewPureStorageProtectionGroup2x.output.HttpStatusCode 600)}}",
+                            "Error": true,
+                            "Message": "{{if .global.NewPureStorageProtectionGroup2x.output.Errors}}{{$err := (index .global.NewPureStorageProtectionGroup2x.output.Errors 0)}}{{if (index $err \"Ctx\")}}{{$err.Ctx}}: {{end}}{{$err.Msg}}{{else}}{{.global.NewPureStorageProtectionGroup2x.output.HttpStatusMsg}}{{end}}",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Protection Group(s) created successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ProtectionGroup",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].name",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "HostCount",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].host_count",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "HostGroupCount",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].host_group_count",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "TargetCount",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].target_count",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "VolumeCount",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].volume_count",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Endpoint",
+                    "Url": "/protection-groups"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureProtectionGroup\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.ProtectionGroupName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "Created a new protection group successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                }
+            ],
+            "CancelAction": [],
+            "ClassId": "workflow.BatchApiExecutor",
+            "Constraints": {
+                "ObjectType": "workflow.TaskConstraints",
+                "TargetDataType": {
+                    "ApiVersion": "2",
+                    "ObjectType": "storage.PureArray"
+                }
+            },
+            "Description": "New Protection group created on Flash Array ",
+            "ErrorResponseHandler": {
+                "ObjectType": "workflow.ErrorResponseHandler",
+                "Selector": "Name eq \"PureArrayApiErrorResponseHandler\""
+            },
+            "Name": "NewPureStorageProtectionGroup2x",
+            "ObjectType": "workflow.BatchApiExecutor",
+            "Output": {
+                "HostCount": "{{.global.NewPureStorageProtectionGroup2x.output.HostCount}}",
+                "HostGroupCount": "{{.global.NewPureStorageProtectionGroup2x.output.HostGroupCount}}",
+                "ProtectionGroup": "{{.global.NewPureStorageProtectionGroup2x.output.ProtectionGroup}}",
+                "TargetCount": "{{.global.NewPureStorageProtectionGroup2x.output.TargetCount}}",
+                "VolumeCount": "{{.global.NewPureStorageProtectionGroup2x.output.TargetCount}}"
+            },
+            "RetryFromFailedApi": true,
+            "SharedScope": "shared",
+            "TaskDefinition": {
+                "ObjectType": "workflow.TaskDefinition",
+                "Selector": "Name eq \"NewPureProtectionGroup\" and Version eq 1"
+            }
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/BatchApiExecutors",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "Batch": [
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "GET",
+                    "Name": "GetArrayVersion",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{ne .global.GetArrayVersion.output.ApiVersion \"2\"}}",
+                            "Message": "This task is only supported on PureArrays with Purity FA version 6.2.0 and greater.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Get Array ApiVersion successful.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ApiVersion",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.ApiVersion",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Local",
+                    "Url": "/v1/storage/PureArrays/{{.global.task.input.StorageDevice.Moid}}"
+                },
+                {
+                    "Body": "{\"suffix\": \"{{.global.task.input.ProtectionGroupSnapshotSuffix}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "NewProtectionGroupSnapshot2x",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.NewProtectionGroupSnapshot2x.output.HttpStatusCode 401}}",
+                            "Message": "Invalid credentials. Please check the username and password for connecting to the endpoint.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "{{and (ge .global.NewProtectionGroupSnapshot2x.output.HttpStatusCode 400) (lt .global.NewProtectionGroupSnapshot2x.output.HttpStatusCode 600)}}",
+                            "Error": true,
+                            "Message": "{{if .global.NewProtectionGroupSnapshot2x.output.Errors}}{{$err := (index .global.NewProtectionGroupSnapshot2x.output.Errors 0)}}{{if (index $err \"Ctx\")}}{{$err.Ctx}}: {{end}}{{$err.Msg}}{{else}}{{.global.NewProtectionGroupSnapshot2x.output.HttpStatusMsg}}{{end}}",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Protection Group(s) created successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "SnapshotName",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].name",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "SourceDetails",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].source",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "DestroyredStatus",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].destroyed",
+                                "Secure": false,
+                                "Type": "simple"
+                            },
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "EradicationConfig",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0].eradication_config",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Endpoint",
+                    "Url": "/protection-group-snapshots?source_names={{.global.task.input.ProtectionGroupName}}&replicate_now={{.global.task.input.ReplicateNow}}&replicate={{.global.task.input.Replicate}}&for_replication={{.global.task.input.ForReplication}}&apply_retention={{.global.task.input.ApplyRetention}}"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureProtectionGroup\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.ProtectionGroupName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "Updated the inventory successfully",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureProtectionGroupSnapshot\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.NewProtectionGroupSnapshot2x.output.SnapshotName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdatePGSnapshotInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdatePGSnapshotInventory.output.HttpStatusCode 200}}",
+                            "Message": "Protection Group Snapshot inventory updated successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdatePGSnapshotInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                }
+            ],
+            "CancelAction": [],
+            "ClassId": "workflow.BatchApiExecutor",
+            "Constraints": {
+                "ObjectType": "workflow.TaskConstraints",
+                "TargetDataType": {
+                    "ApiVersion": "2",
+                    "ObjectType": "storage.PureArray"
+                }
+            },
+            "Description": "Add Protection group snapshot on FlashArray",
+            "ErrorResponseHandler": {
+                "ObjectType": "workflow.ErrorResponseHandler",
+                "Selector": "Name eq \"PureArrayApiErrorResponseHandler\""
+            },
+            "Name": "NewProtectionGroupSnapshot2x",
+            "ObjectType": "workflow.BatchApiExecutor",
+            "Output": {
+                "DestroyredStatus": "{{.global.NewProtectionGroupSnapshot2x.output.DestroyredStatus}}",
+                "EradicationConfig": "{{.global.NewProtectionGroupSnapshot2x.output.EradicationConfig}}",
+                "SnapshotName": "{{.global.NewProtectionGroupSnapshot2x.output.SnapshotName}}",
+                "SourceDetails": "{{.global.NewProtectionGroupSnapshot2x.output.SourceDetails}}"
+            },
+            "RetryFromFailedApi": true,
+            "SharedScope": "shared",
+            "TaskDefinition": {
+                "ObjectType": "workflow.TaskDefinition",
+                "Selector": "Name eq \"NewProtectionGroupSnapshot\" and Version eq 1"
+            }
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/BatchApiExecutors",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "Batch": [
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "GET",
+                    "Name": "GetArrayVersion",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{ne .global.GetArrayVersion.output.ApiVersion \"2\"}}",
+                            "Message": "This task is only supported on PureArrays with Purity FA version 6.2.0 and greater.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Get Array ApiVersion successful.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ApiVersion",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.ApiVersion",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Local",
+                    "Url": "/v1/storage/PureArrays/{{.global.task.input.StorageDevice.Moid}}"
+                },
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "AddTargetToProtectionGroup2x",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.AddTargetToProtectionGroup2x.output.HttpStatusCode 401}}",
+                            "Message": "Invalid credentials. Please check the username and password for connecting to the endpoint.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "{{and (ge .global.AddTargetToProtectionGroup2x.output.HttpStatusCode 400) (lt .global.AddTargetToProtectionGroup2x.output.HttpStatusCode 600)}}",
+                            "Error": true,
+                            "Message": "{{if .global.AddTargetToProtectionGroup2x.output.Errors}}{{$err := (index .global.AddTargetToProtectionGroup2x.output.Errors 0)}}{{if (index $err \"Ctx\")}}{{$err.Ctx}}: {{end}}{{$err.Msg}}{{else}}{{.global.AddTargetToProtectionGroup2x.output.HttpStatusMsg}}{{end}}",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Added target FlashArray into Protection successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ProtectionGroup",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0]['group'].name",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Endpoint",
+                    "Url": "/protection-groups/targets?group_names={{.global.task.input.ProtectionGroupName}}&member_names={{.global.task.input.TargetFlashArrayName}}"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureProtectionGroup\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.ProtectionGroupName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "Created a new protection group successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                }
+            ],
+            "CancelAction": [],
+            "ClassId": "workflow.BatchApiExecutor",
+            "Constraints": {
+                "ObjectType": "workflow.TaskConstraints",
+                "TargetDataType": {
+                    "ApiVersion": "2",
+                    "ObjectType": "storage.PureArray"
+                }
+            },
+            "Description": "Add a new FlashArray as a target in to protection groups",
+            "ErrorResponseHandler": {
+                "ObjectType": "workflow.ErrorResponseHandler",
+                "Selector": "Name eq \"PureArrayApiErrorResponseHandler\""
+            },
+            "Name": "AddTargetToProtectionGroup2x",
+            "ObjectType": "workflow.BatchApiExecutor",
+            "Output": {
+                "ProtectionGroup": "{{.global.AddTargetToProtectionGroup2x.output.ProtectionGroup}}"
+            },
+            "RetryFromFailedApi": true,
+            "SharedScope": "shared",
+            "TaskDefinition": {
+                "ObjectType": "workflow.TaskDefinition",
+                "Selector": "Name eq \"AddNewTargetToProtectionGroup\" and Version eq 1"
+            }
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/BatchApiExecutors",
+        "Verb": "POST"
+    },
+    {
+        "Body": {
+            "Batch": [
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "GET",
+                    "Name": "GetArrayVersion",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{ne .global.GetArrayVersion.output.ApiVersion \"2\"}}",
+                            "Message": "This task is only supported on PureArrays with Purity FA version 6.2.0 and greater.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Get Array ApiVersion successful.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ApiVersion",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.ApiVersion",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Local",
+                    "Url": "/v1/storage/PureArrays/{{.global.task.input.StorageDevice.Moid}}"
+                },
+                {
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "AddVolumeToProtectionGroup2x",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.AddVolumeToProtectionGroup2x.output.HttpStatusCode 401}}",
+                            "Message": "Invalid credentials. Please check the username and password for connecting to the endpoint.",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "TerminalError"
+                        },
+                        {
+                            "Condition": "{{and (ge .global.AddVolumeToProtectionGroup2x.output.HttpStatusCode 400) (lt .global.AddVolumeToProtectionGroup2x.output.HttpStatusCode 600)}}",
+                            "Error": true,
+                            "Message": "{{if .global.AddVolumeToProtectionGroup2x.output.Errors}}{{$err := (index .global.AddVolumeToProtectionGroup2x.output.Errors 0)}}{{if (index $err \"Ctx\")}}{{$err.Ctx}}: {{end}}{{$err.Msg}}{{else}}{{.global.AddVolumeToProtectionGroup2x.output.HttpStatusMsg}}{{end}}",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "true",
+                            "Message": "Volumes got added in to Protection Group successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "ResponseSpec": {
+                        "ErrorParameters": [],
+                        "ObjectType": "content.Grammar",
+                        "Parameters": [
+                            {
+                                "AcceptSingleValue": false,
+                                "ComplexType": "",
+                                "ItemType": "simple",
+                                "Name": "ProtectionGroup",
+                                "ObjectType": "content.Parameter",
+                                "Path": "$.items[0]['group'].name",
+                                "Secure": false,
+                                "Type": "simple"
+                            }
+                        ],
+                        "Types": []
+                    },
+                    "TargetType": "Endpoint",
+                    "Url": "/protection-groups/volumes?group_names={{.global.task.input.ProtectionGroupName}}&member_names={{.global.task.input.VolumeName}}"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureProtectionGroup\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.ProtectionGroupName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "Volumes got added in to Protection Group successfully.",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                },
+                {
+                    "Body": "{\"Type\":\"storage.PureVolume\",\"NamingProperty\":\"Name\",\"Values\": [\"{{.global.task.input.VolumeName}}\"],\"RegisteredDevice\":\"{{.global.task.target.RegisteredDeviceMoid}}\"}",
+                    "ContentType": "json",
+                    "EndpointRequestType": "Internal",
+                    "Method": "POST",
+                    "Name": "UpdateVolumeInventory",
+                    "ObjectType": "workflow.WebApi",
+                    "Outcomes": [
+                        {
+                            "Condition": "{{eq .global.UpdateVolumeInventory.output.HttpStatusCode 200}}",
+                            "Message": "Updated Volume Inventory Successfully",
+                            "ObjectType": "workflow.Outcome"
+                        },
+                        {
+                            "Condition": "{{ne .global.UpdateVolumeInventory.output.HttpStatusCode 200}}",
+                            "Message": "{{.global.UpdateVolumeInventory.output.HttpStatusMsg}}",
+                            "ObjectType": "workflow.Outcome",
+                            "Type": "Error"
+                        }
+                    ],
+                    "Protocol": "https",
+                    "TargetType": "Local",
+                    "Url": "/v1/task/PureScopedInventories"
+                }
+            ],
+            "CancelAction": [],
+            "ClassId": "workflow.BatchApiExecutor",
+            "Constraints": {
+                "ObjectType": "workflow.TaskConstraints",
+                "TargetDataType": {
+                    "ApiVersion": "2",
+                    "ObjectType": "storage.PureArray"
+                }
+            },
+            "Description": "Add volumes in to protection groups",
+            "ErrorResponseHandler": {
+                "ObjectType": "workflow.ErrorResponseHandler",
+                "Selector": "Name eq \"PureArrayApiErrorResponseHandler\""
+            },
+            "Name": "AddVolumeToProtectionGroup",
+            "ObjectType": "workflow.BatchApiExecutor",
+            "Output": {
+                "ProtectionGroup": "{{.global.AddVolumeToProtectionGroup2x.output.ProtectionGroup}}"
+            },
+            "RetryFromFailedApi": true,
+            "SharedScope": "shared",
+            "TaskDefinition": {
+                "ObjectType": "workflow.TaskDefinition",
+                "Selector": "Name eq \"AddVolumesToProtectionGroups\" and Version eq 1"
+            }
+        },
+        "ClassId": "bulk.RestSubRequest",
+        "ObjectType": "bulk.RestSubRequest",
+        "TargetMoid": "",
+        "Uri": "/v1/workflow/BatchApiExecutors",
+        "Verb": "POST"
+    }
+]
